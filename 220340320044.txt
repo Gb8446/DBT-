@@ -1,0 +1,118 @@
+section 1-1
+use exam;
+create table DEPT (DEPTNO int(2),DNAME	varchar(15),LOC	varchar(10));
+insert into DEPT values (10	,'ACCOUNTING','NEW YORK'),
+(20	,'RESEARCH'	,'DALLAS'),
+(30,'SALES','CHICAGO'),
+(40,'OPERATIONS','BOSTON');
+select * from DEPT;
+
+section 1-2
+
+use exam;
+create table EMP (EMPNO	int(4),ENAME varchar(10),JOB varchar(9),HIREDATE date,
+SAL float(7,2),COMM float(7,2),DEPTNO	int(2));
+insert into EMP values (7839,'KING','MANAGER','1991-11-17',	5000,NULL,10),
+(7698,'BLAKE','CLERK','1981-05-01',2850,NULL,30),
+(7782,'CLARK','MANAGER','1981-06-09',2450,	NULL	,10),
+(7566,'JONES','CLERK','1981-04-02',2975,	NULL, 20),
+(7654	,'MARTIN','SALESMAN','1981-09-28',1250,1400	,30),
+(7499,'ALLEN','SALESMAN','1981-02-20',1600,300,30);
+select * from EMP;
+
+section 1-3
+
+select * from EMP where SAL between 2500 and 5000;
+
+section 1-4
+
+select ENAME from EMP ORDER BY ENAME DESC;
+
+SECTION 1-5
+
+select lower(JOB) from EMP;
+
+section 1-6
+
+select ENAME,length(ENAME)"length of ename" from EMP;
+
+section 1-7
+
+select DEPTNO ,count(EMPNO) FROM EMP group by DEPTNO;
+
+SECTION 1-8
+
+select DNAME,ENAME from DEPT,EMP where DEPT.DEPTNO=EMP.DEPTNO;
+
+SECTION 1-9
+
+select ENAME, instr(ENAME,'AR') from EMP;
+
+section 1-10
+
+select ename, sal, sal*0.2 "HRA" from emp;
+
+section 2-1
+
+create table temp ( string1 varchar (10), string2 varchar (15), result varchar (10));
+drop table temp;
+delimiter //
+create procedure PROC1 (string1 varchar (10),string2 varchar(15))
+begin
+declare z int;
+set z= instr(string2,string1);
+if z>0 then
+insert into temp values (string1,string2,'exit');
+else
+insert into temp values (string1,string2,' not exit');
+end if;
+end;
+//
+delimiter ;
+
+call PROC1 ('dac','cdac');
+call PROC1 ('xyz','cdac');
+select * from temp;
+
+
+section 2-3
+
+use exam;
+create table tempp (res varchar(10));
+delimiter //
+create function FUNC1 (x int,y int, z int)
+returns boolean
+deterministic
+begin
+if (x+y>z) and (x+z>y) and (y+z>x) then 
+return true;
+else
+return false;
+end if;
+end;
+//
+delimiter ;
+
+delimiter //
+create procedure abc (x int,y int, z int)
+begin
+declare R int;
+set R=FUNC1(x,y,z);
+if R=0 THEN
+insert into tempp values('TRUE');
+else
+insert into tempp values('FALSE');
+end if;
+end;
+//
+delimiter ;
+drop procedure abc;
+call abc (3,4,5);
+CALL ABC (1,2,3);
+SELECT * FROM TEMPP;
+
+
+
+
+
+
